@@ -43,6 +43,7 @@ The read tools are free and need no auth. See **https://horizon.alchemylab.sh/de
 | `get_related` | Semantic "more like this" for a given item |
 | `list_sources` | The ingested source catalogue |
 | `ask_horizon` | Synthesized, cited answer over the recent corpus *(needs an API key)* |
+| `get_trends` | The week's rising models, labs & people by momentum *(Pro — needs an API key)* |
 
 Every item tool also returns `structuredContent` for easy parsing.
 
