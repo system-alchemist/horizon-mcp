@@ -10,9 +10,17 @@
   "homepage": "https://horizon.alchemylab.sh/developers",
   "repository": "https://github.com/system-alchemist/horizon-mcp",
   "license": "MIT",
-  "keywords": ["ai-news", "ai-regulation", "eu-ai-act", "regulation-tracker", "briefing", "mcp"],
+  "keywords": [
+    "ai-news",
+    "ai-regulation",
+    "eu-ai-act",
+    "regulation-tracker",
+    "briefing",
+    "mcp"
+  ],
   "mcpServers": {
     "horizon": {
+      "type": "http",
       "url": "https://horizon.alchemylab.sh/api/mcp"
     }
   }
