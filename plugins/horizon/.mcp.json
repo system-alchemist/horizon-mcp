@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "horizon": {
+      "type": "http",
+      "url": "https://horizon.alchemylab.sh/api/mcp"
+    }
+  }
+}
