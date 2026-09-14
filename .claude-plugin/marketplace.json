@@ -1,0 +1,19 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "alchemylab",
+  "description": "Plugins from Alchemy Lab. Horizon: free, no-key AI news and AI regulation tracking for agents.",
+  "owner": {
+    "name": "Alchemy Lab",
+    "url": "https://alchemylab.sh"
+  },
+  "plugins": [
+    {
+      "name": "horizon",
+      "source": "./plugins/horizon",
+      "description": "AI news + AI regulation tracker (EU AI Act, US federal & state, UK) as MCP tools, with /ai-news, /ai-regulation and /ai-receipts skills. Free, no API key.",
+      "version": "1.0.0",
+      "category": "news",
+      "keywords": ["ai news", "ai regulation", "eu ai act", "mcp", "briefing", "regulation tracker"]
+    }
+  ]
+}

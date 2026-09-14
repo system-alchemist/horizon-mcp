@@ -1,0 +1,19 @@
+{
+  "name": "horizon",
+  "displayName": "Horizon: AI News & AI Regulation Tracker",
+  "version": "1.0.0",
+  "description": "Free, no-key AI news + AI regulation tracker (EU AI Act, US federal & state, UK) for Claude Code. Daily briefing, regulation status, and receipts on who is actually saying what.",
+  "author": {
+    "name": "Alchemy Lab",
+    "url": "https://alchemylab.sh"
+  },
+  "homepage": "https://horizon.alchemylab.sh/developers",
+  "repository": "https://github.com/system-alchemist/horizon-mcp",
+  "license": "MIT",
+  "keywords": ["ai-news", "ai-regulation", "eu-ai-act", "regulation-tracker", "briefing", "mcp"],
+  "mcpServers": {
+    "horizon": {
+      "url": "https://horizon.alchemylab.sh/api/mcp"
+    }
+  }
+}

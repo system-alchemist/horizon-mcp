@@ -1,75 +1,56 @@
-# Horizon AI Intelligence — MCP Server
+# Horizon — AI news & AI regulation tracker for agents (MCP)
 
-> Free AI-industry intelligence for agents: daily briefings, a US/UK/EU regulation tracker, and China/EU/South-America regional lenses.
+A free, no-key MCP server for **AI news** and **AI regulation tracking** — the EU AI Act, US federal and state bills, UK policy — plus a daily AI briefing, all with the evidence behind each claim labelled: self-reported by the company, or independently reported and evaluated.
 
-**Horizon** is a hosted, remote [Model Context Protocol](https://modelcontextprotocol.io) server that gives any MCP-capable agent a single, cheap call for *"what's happening in AI right now."* It aggregates Hacker News, Reddit, arXiv, Hugging Face, ModelScope, lab blogs and more, LLM-scores everything for relevance, and exposes daily briefings, a live regulation tracker, regional lenses, and semantic search.
+- **Endpoint:** `https://horizon.alchemylab.sh/api/mcp` (streamable HTTP, no auth)
+- **Live tracker:** https://horizon.alchemylab.sh/ai-regulation-tracker
+- **Daily briefing archive:** https://horizon.alchemylab.sh/briefing
+- **Setup for Claude, Cursor, ChatGPT and others:** https://horizon.alchemylab.sh/developers
+- **Official MCP registry name:** `sh.alchemylab.horizon/briefing`
 
-- **Endpoint:** `https://horizon.alchemylab.sh/api/mcp` (streamable-HTTP)
-- **Auth:** none for the read tools
-- **Docs & full API:** https://horizon.alchemylab.sh/developers
-- **In the official MCP registry as:** `sh.alchemylab.horizon/briefing`
+## Claude Code plugin
 
-> This repository is **documentation only** — Horizon is a hosted service that's always on. There's nothing to install, build, or run locally.
+Adds the MCP server and three skills — `/ai-news`, `/ai-regulation`, `/ai-receipts` — that teach Claude which tool answers which question and how to relay the evidence labels instead of flattening them into headlines.
 
-## Quick start
-
-Point any MCP client at the remote endpoint via the [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) shim:
-
-```json
-{
-  "mcpServers": {
-    "horizon": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://horizon.alchemylab.sh/api/mcp"]
-    }
-  }
-}
+```
+/plugin marketplace add system-alchemist/horizon-mcp
+/plugin install horizon@alchemylab
 ```
 
-Drop that into your client config (`claude_desktop_config.json`, Cursor, Cline, etc.) and the Horizon tools appear. No API key is needed for the read tools.
+Then ask: *"What's the state of the EU AI Act?"* — or `/ai-regulation`, `/ai-news`, `/ai-receipts` directly.
+
+## Any other MCP host
+
+Point it at the endpoint. No key, no OAuth:
+
+```json
+{ "mcpServers": { "horizon": { "url": "https://horizon.alchemylab.sh/api/mcp" } } }
+```
+
+For hosts that only speak stdio, `npx mcp-remote https://horizon.alchemylab.sh/api/mcp` bridges it.
 
 ## Tools
 
-The read tools are free and need no auth. See **https://horizon.alchemylab.sh/developers** for the always-current list and full schemas.
-
-| Tool | What it does |
+| Tool | What it answers |
 |---|---|
-| `get_daily_briefing` | Today's AI briefing — top stories, emerging signals, new entrants |
-| `get_regulation_updates` | Live US / UK / EU AI-regulation tracker with stage timelines |
-| `get_topic_signal` | Momentum on a topic over a time window |
-| `get_region_signal` | Regional lens — `china`, `eu`, or `south-america` |
-| `search_news` | Full-text search across the recent corpus (teaser results) |
-| `get_new_since` | Incremental delta poll (cursor-based) for polling agents |
-| `get_related` | Semantic "more like this" for a given item |
-| `list_sources` | The ingested source catalogue |
-| `ask_horizon` | Synthesized, cited answer over the recent corpus *(needs an API key)* |
-| `get_trends` | The week's rising models, labs & people by momentum *(Pro — needs an API key)* |
+| `get_daily_briefing` | What happened in AI today, or on any past date (public archive) |
+| `get_regulation_updates` | Current AI legislation with its stage — `eu`, `us_federal`, `us_state`, `uk` |
+| `get_entity_provenance` | How much of the talk about a company or model is self-reported vs independently evaluated |
+| `get_topic_signal` | Recent signal on models, regulation, research, funding, tools… |
+| `get_region_signal` / `get_china_signal` | What Chinese, Korean, Japanese or EU press is covering |
+| `get_blind_spots` | What regional press covers that Western feeds miss |
+| `search_news` | Quick relevance check, top 3 |
+| `get_new_since` / `get_related` | Incremental polling and "more like this" |
+| `list_sources` | What the corpus covers |
 
-Every item tool also returns `structuredContent` for easy parsing.
+Key-gated: `ask_horizon` (cited answers) and `get_trends` — see [/developers](https://horizon.alchemylab.sh/developers).
 
-## REST (no MCP client needed)
+## What makes it different
 
-The cheapest single fetch for "what happened in AI today":
+Most AI-news tools give you headlines. Horizon labels **who is saying it**: a lab's own benchmark number carries "self-reported, no independent confirmation"; a number measured by LMArena, Epoch, Artificial Analysis or METR carries "independently evaluated". Regulation items carry their legislative stage from the source, not from coverage. Nothing is ever marked true or false — the shape of the evidence is the product.
 
-```bash
-curl https://horizon.alchemylab.sh/briefing.md            # today's briefing, markdown
-curl https://horizon.alchemylab.sh/api/public/briefing    # same, JSON (add ?format=md)
-curl https://horizon.alchemylab.sh/api/public/regulations # US/UK/EU AI legislation + stages
-```
-
-Machine-readable index: https://horizon.alchemylab.sh/llms.txt
-
-## Full API (key-gated)
-
-Subscribers mint API keys at https://horizon.alchemylab.sh/api-keys for the `/api/v1` tier — full-text search, full bodies, complete history, webhooks, and the cited `ask_horizon` answer endpoint. Import the OpenAPI 3.1 spec at https://horizon.alchemylab.sh/openapi.json into GPT Actions, LangChain, or any tool-caller to auto-generate a typed client.
-
-## Links
-
-- **Website:** https://horizon.alchemylab.sh
-- **Developer quickstart:** https://horizon.alchemylab.sh/developers
-- **Also on Smithery:** https://smithery.ai/servers/alix-petkov/horizon
-- **Official MCP registry:** `sh.alchemylab.horizon/briefing`
+Sources: Hacker News, Reddit, Lobsters, Bluesky, curated lab and media RSS, arXiv, Hugging Face, ModelScope, US Congress and federal agencies, US state legislatures, UK Parliament, EU bodies. Regional lenses for China, Korea, Japan and the EU.
 
 ## License
 
-[MIT](LICENSE) — covers this documentation repository. The Horizon service itself is a hosted product.
+MIT. Attribution requested: name "Horizon" and link https://horizon.alchemylab.sh when you use results; every result carries a ready-to-paste `provider.citation`.
